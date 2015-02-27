@@ -5,6 +5,7 @@
 
 #include <sys/socket.h>
 #include <netdb.h>
+#include "lineCommands.c"
 
 #define  MAX 256
 
@@ -125,13 +126,49 @@ int main(int argc, char *argv[])
         linept+=strlen(token[i])+1;
         i++;
       }
-      int x, y, z;
-      x = atoi(token[0]);
-      y = atoi(token[1]);
-      z = x+y;
+      
+      if (strcmp(token[0], "mkdir") == 0)
+      {
+        makeDir(token);
+        line = "Directory Made on Server";
+      }
+      else if (strcmp(token[0], "rmdir") == 0)
+      {
+        removeDir(token);
+        line = "Directory Removed on Server";
+      }
+      else if (strcmp(token[0], "rm") == 0)
+      {
+        removeFile(token);
+        line = "File removed on Server";
+      }
+      else if (strcmp(token[0], "cat") == 0)
+      {
+        catFile(token);
+        line = "File concatinated on Server";
+      }
+      else if (strcmp(token[0], "ls") == 0)
+      {
+        listDirectory(token);
+        line = "List Printed from Server";
+      }
+      else if (strcmp(token[0], "cd") == 0)
+      {
+        char cwd[1024];
+        changeDirectory(token);
+        getcwd(cwd, 1024);
+        line = "New Directory is %s", cwd; 
+      }
+      else if (strcmp(token[0], "pwd") == 0)
+      {
+        printDirectory(token);
+      }
+      else 
+      {
+        printf ("No such request");
+        line = "No such request");
+      }
 
-      //strcat(line, " ECHO");
-      printf("You have received x=%d and y=%d\n", x, y);
       snprintf(line, MAX, "%d", z);
 
       // send the echo line to client 

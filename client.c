@@ -7,6 +7,7 @@
 
 #include <sys/socket.h>
 #include <netdb.h>
+#include "lineCommands.c"
 
 #define MAX 256
 

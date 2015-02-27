@@ -95,30 +95,32 @@ int ls_dir(char *dname)
   return 0;
 }
 
-makeDir(ENTRY entry)
+void makeDir(char *tokens)
 {
-	if(entry[1].value == NULL) exit(1);
+	if(tokens[1] == NULL) exit(1);
     
-    mkdir(entry[1].value, 0755);
+    mkdir(tokens[1], 0755);
     
-    if (mkdir(entry[1].value, 0777) < 0){
+    if (mkdir(tokens[1], 0777) < 0){
         printf("errno=%d : %s\n", errno, strerror(errno));
     }
 }
-removeDir(ENTRY entry)
+void removeDir(char *tokens)
 {
-	if (entry[1].value == NULL) exit(1);
-    rmdir(entry[1].value);
+	if (tokens[1] == NULL) exit(1);
+    rmdir(tokens[1]);
 }
-removeFile(ENTRY entry)
+void removeFile(char* tokens)
 {
-    if (entry[1].value == NULL) exit(1);
-    remove(entry[1].value);    
+    if (tokens[1] == NULL) exit(1);
+    remove(tokens[1]);    
 }
-catFile(ENTRY entry)
+void catFile(char *tokens)
 {  
-    if (entry[1].name == NULL) exit(1);
-    fd = open(entry[1].value, O_RDONLY);
+	int fd, n, i;
+    char buff[4096];
+    if (tokens[1] == NULL) exit(1);
+    fd = open(tokens[1], O_RDONLY);
     if (fd < 0) exit(2);
     while (n = read(fd, buff, 1024))
     {
@@ -154,12 +156,17 @@ catFile(ENTRY entry)
     close(gd);
 
   }*/
-listDirectory(ENTRY entry)
+void listDirectory(char *tokens)
 {
-    if (entry[1].value == NULL)
+	char cwd[1024];
+	char name[1024];
+	char *s;
+	int r;
+
+    if (tokens[1] == NULL)
       s = "./";
     else
-      s = entry[1].value;
+      s = tokens[1];
 
     sp = &mystat;
      if ((r = lstat(s, sp)) < 0)
@@ -184,12 +191,30 @@ listDirectory(ENTRY entry)
       ls_file(name);
 }
 
-changeDirectory(myargv)
+void changeDirectory(char *tokens)
 {
-	if (myargv[1]==NULL)
+	char *HOME, *envp;
+	int i;
+	getenv(envp);
+	while(envp[i]!=NULL)
+	{
+		if (strncmp(envp[i], "HOME=",5)==0)
+		{  
+			HOME = envp[i]; //grab the string
+			HOME = HOME +5; //consume "HOME=" from string
+		}
+		i++;
+	}
+	if (tokens[1]==NULL)
 	{
 		chdir(HOME);
 	} //set myargv1 to $HOME
-	chdir(myargv[1]);
+	chdir(tokens[1]);
 }
 
+void printDirectory(char *tokens)
+{
+	char cwd[1024];
+	getcwd(cwd, 1024);
+	printf ("Directory = %s \n", cwd);
+}
