@@ -4,4 +4,6 @@ Lab 3 homeworks
 Leah - rm, pwd, cat, cd
 Mackenzie - mkdir, rmdir, ls
 
+Do not commit compiled code.
+
 
