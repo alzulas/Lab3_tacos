@@ -130,34 +130,34 @@ int main(int argc, char *argv[])
       if (strcmp(token[0], "mkdir") == 0)
       {
         makeDir(token);
-        line = "Directory Made on Server";
+        linept = "Directory Made on Server";
       }
       else if (strcmp(token[0], "rmdir") == 0)
       {
         removeDir(token);
-        line = "Directory Removed on Server";
+        linept = "Directory Removed on Server";
       }
       else if (strcmp(token[0], "rm") == 0)
       {
         removeFile(token);
-        line = "File removed on Server";
+        linept = "File removed on Server";
       }
       else if (strcmp(token[0], "cat") == 0)
       {
         catFile(token);
-        line = "File concatinated on Server";
+        linept = "File concatinated on Server";
       }
       else if (strcmp(token[0], "ls") == 0)
       {
         listDirectory(token);
-        line = "List Printed from Server";
+        linept = "List Printed from Server";
       }
       else if (strcmp(token[0], "cd") == 0)
       {
         char cwd[1024];
         changeDirectory(token);
         getcwd(cwd, 1024);
-        line = "New Directory is %s", cwd; 
+        linept = "New Directory is %s", cwd; 
       }
       else if (strcmp(token[0], "pwd") == 0)
       {
@@ -166,10 +166,10 @@ int main(int argc, char *argv[])
       else 
       {
         printf ("No such request");
-        line = "No such request");
+        linept = "No such request";
       }
 
-      snprintf(line, MAX, "%d", z);
+      snprintf(line, MAX, "%d", linept);
 
       // send the echo line to client 
       n = write(newsock, line, MAX);
