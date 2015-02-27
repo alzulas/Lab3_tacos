@@ -26,7 +26,7 @@ struct stat mystat, *sp;
 char *t1 = "xwrxwrxwrx-----";
 char *t2 = "---------------";
 
-void ls_file(char *fname)
+void ls_file(char *fname) //The K.C. Code for ls
 {
   struct stat fstat, *sp;
   int r, i;
@@ -76,64 +76,63 @@ void ls_file(char *fname)
   printf("<br>");
 }
 
-int ls_dir(char *dname)
+int ls_dir(char *dname) //Zulas code for ls dir
 {
   struct dirent *dp;
   int fd, i;
   char buff[1024];
 
-  printf("Directory Location: %s <br>", dname);
-  fd = opendir(dname);
-  while ((dp = readdir(fd)) != NULL)
+  printf("Directory Location: %s <br>", dname); // print the dir location
+  fd = opendir(dname); //open the dir into fd
+  while ((dp = readdir(fd)) != NULL) //while not the end of the dir
   {
-     if (dp->d_name!=NULL)
-     {
-	printf("%s <br>",dp->d_name);
-     }
+    if (dp->d_name!=NULL) //if the name isn't null
+    {
+		printf("%s <br>",dp->d_name); //print the name of that item in the directory
+    }
   }
-  //printf("But it didn't print anything <br>");
   return 0;
 }
 
-void makeDir(char *tokens)
+void makeDir(char *tokens) //mkdir
 {
-	if(tokens[1] == NULL) exit(1);
+	if(tokens[1] == NULL) exit(1); //Make sure there is a name to make the dir
     
-    mkdir(tokens[1], 0755);
+    mkdir(tokens[1], 0755); //mk dir
     
-    if (mkdir(tokens[1], 0777) < 0){
-        printf("errno=%d : %s\n", errno, strerror(errno));
+    if (mkdir(tokens[1], 0777) < 0){ //unless it's already made, then don't make dir.
+        printf("errno=%d : %s\n", errno, strerror(errno)); //instead error
     }
 }
-void removeDir(char *tokens)
+void removeDir(char *tokens) //rmdir
 {
-	if (tokens[1] == NULL) exit(1);
-    rmdir(tokens[1]);
+	if (tokens[1] == NULL) exit(1); //if no name of dir, exit.
+    rmdir(tokens[1]); //otherwise, remove dir
 }
-void removeFile(char* tokens)
+void removeFile(char* tokens) //rm
 {
-    if (tokens[1] == NULL) exit(1);
-    remove(tokens[1]);    
+    if (tokens[1] == NULL) exit(1);  //if no name, exit
+    remove(tokens[1]); //remove the file
 }
-void catFile(char *tokens)
+void catFile(char *tokens) //cat
 {  
 	int fd, n, i;
     char buff[4096];
-    if (tokens[1] == NULL) exit(1);
-    fd = open(tokens[1], O_RDONLY);
-    if (fd < 0) exit(2);
-    while (n = read(fd, buff, 1024))
+    if (tokens[1] == NULL) exit(1); //if no name of thing to cat, exit
+    fd = open(tokens[1], O_RDONLY); //open file name, read only
+    if (fd < 0) exit(2); //if the file is empty, exit
+    while (n = read(fd, buff, 1024)) //so long as there is still stuff to read, read
     {
-      for (i = 0; i < n; i++)
+      for (i = 0; i < n; i++) //for look to print char to the screen
       {
-        if(buff[i] == "\n")
+        if(buff[i] == "\n") //switch \n to \r
           putchar("\r");
         else
           putchar(buff[i]);
       }
     }
     printf("\n");
-    close(fd);
+    close(fd); //close file
 }
 /*  else if (strcmp(entry[0].value, "cp")==0)
   {
@@ -156,7 +155,7 @@ void catFile(char *tokens)
     close(gd);
 
   }*/
-void listDirectory(char *tokens)
+void listDirectory(char *tokens) //ls code by K.C.
 {
 	char cwd[1024];
 	char name[1024];
@@ -169,7 +168,7 @@ void listDirectory(char *tokens)
       s = tokens[1];
 
     sp = &mystat;
-     if ((r = lstat(s, sp)) < 0)
+     if ((r = lstat(s, sp)) < 0) //added an ls without a directory
     {
       getcwd(cwd, 1024);
       strcpy(name, cwd);
@@ -191,30 +190,31 @@ void listDirectory(char *tokens)
       ls_file(name);
 }
 
-void changeDirectory(char *tokens)
+void changeDirectory(char *tokens) //cd
 {
 	char *HOME, *envp;
 	int i;
-	getenv(envp);
-	while(envp[i]!=NULL)
+
+	if (tokens[1]==NULL) //if you just said cd
 	{
-		if (strncmp(envp[i], "HOME=",5)==0)
-		{  
-			HOME = envp[i]; //grab the string
-			HOME = HOME +5; //consume "HOME=" from string
+		getenv(envp); //get environmental pointer
+		while(envp[i]!=NULL) //while not at null
+		{
+			if (strncmp(envp[i], "HOME=",5)==0) //if the string is HOME=..
+			{  
+				HOME = envp[i]; //grab the string
+				HOME = HOME +5; //consume "HOME=" from string
+			}
+			i++; //If not, continue to the next part
 		}
-		i++;
-	}
-	if (tokens[1]==NULL)
-	{
-		chdir(HOME);
+		chdir(HOME); //go to home
 	} //set myargv1 to $HOME
-	chdir(tokens[1]);
+	chdir(tokens[1]); //else, go to where you asked.
 }
 
 void printDirectory(char *tokens)
 {
-	char cwd[1024];
-	getcwd(cwd, 1024);
-	printf ("Directory = %s \n", cwd);
+	char cwd[1024]; 
+	getcwd(cwd, 1024);  //figure out the directory
+	printf ("Directory = %s \n", cwd); //print it
 }
