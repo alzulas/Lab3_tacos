@@ -30,7 +30,7 @@ int server_init(char *name)
       printf("unknown host\n");
       exit(1);
    }
-   printf("    hostname=%s  IP=%d\n", hp->h_name,  inet_ntoa(*(long *)hp->h_addr));
+   printf("    hostname=%s  IP=%s\n", hp->h_name,  inet_ntoa(*(long *)hp->h_addr));
   
    //  create a TCP socket by socket() syscall
    printf("2 : create a socket\n");
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
       
       // show the line string
       printf("server: read  n=%d bytes; line=[%s]\n", n, line);
-
+/*
       linept = line;
 
       int i = 0;
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
       {
         printf ("No such request");
         linept = "No such request";
-      }
+      }*/
 
       snprintf(line, MAX, "%s", linept);
 

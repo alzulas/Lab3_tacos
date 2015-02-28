@@ -74,6 +74,60 @@ int main(int argc, char *argv[ ])
 
   client_init(argv);
 
+  /*
+  linept = line;
+
+  int i = 0;
+  while (*linept)
+  {
+    sscanf(linept, "%s", token[i]); //tokenize line
+    linept+=strlen(token[i])+1;
+    myargv[i] = token[i];
+    i++;
+  }
+      
+  if (strcmp(argv[0], "lmkdir") == 0)
+  {
+    makeDir(*argv);
+    linept = "Directory Made on Server";
+  }
+  else if (strcmp(argv[0], "lrmdir") == 0)
+  {
+    removeDir(*argv);
+    linept = "Directory Removed on Server";
+  }
+  else if (strcmp(argv[0], "lrm") == 0)
+  {
+    removeFile(*argv);
+    linept = "File removed on Server";
+  }
+  else if (strcmp(argv[0], "lcat") == 0)
+  {
+    catFile(*argv);
+    linept = "File concatinated on Server";
+  }
+  else if (strcmp(argv[0], "lls") == 0)
+  {
+    listDirectory(*argv);
+    linept = "List Printed from Server";
+  }
+  else if (strcmp(argv[0], "lcd") == 0)
+  {
+    char cwd[1024];
+    changeDirectory(*argv);
+    getcwd(cwd, 1024);
+    printf("New Directory is %s", cwd); 
+    linept = cwd;
+  }
+  else if (strcmp(argv[0], "lpwd") == 0)
+  {
+    printDirectory(*argv);
+  }
+  else 
+  {
+   */
+
+
   printf("********  processing loop  *********\n");
   while (1){
     printf("input a line : ");
@@ -92,5 +146,6 @@ int main(int argc, char *argv[ ])
     n = read(sock, ans, MAX);
     printf("client: read  n=%d bytes; echo=(%s)\n",n, ans);
   }
+  //}
 }
 
