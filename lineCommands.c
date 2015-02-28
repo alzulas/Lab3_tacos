@@ -13,7 +13,7 @@
 
 #define BLKSIZE 4096
 
-#define MAX 10000
+#define MAX 256
 typedef struct {
     char *name;
     char *value;
@@ -96,30 +96,30 @@ int ls_dir(char *dname) //Zulas code for ls dir
 
 void makeDir(char *tokens) //mkdir
 {
-	if(tokens[1] == NULL) exit(1); //Make sure there is a name to make the dir
+	if(tokens[1]) exit(1); //Make sure there is a name to make the dir
     
-    mkdir(tokens[1], 0755); //mk dir
+    mkdir(&tokens[1], 0755); //mk dir
     
-    if (mkdir(tokens[1], 0777) < 0){ //unless it's already made, then don't make dir.
+    if (mkdir(&tokens[1], 0777) < 0){ //unless it's already made, then don't make dir.
         printf("errno=%d : %s\n", errno, strerror(errno)); //instead error
     }
 }
 void removeDir(char *tokens) //rmdir
 {
-	if (tokens[1] == NULL) exit(1); //if no name of dir, exit.
+	if (tokens[1]) exit(1); //if no name of dir, exit.
     rmdir(tokens[1]); //otherwise, remove dir
 }
 void removeFile(char* tokens) //rm
 {
-    if (tokens[1] == NULL) exit(1);  //if no name, exit
-    remove(tokens[1]); //remove the file
+    if (tokens[1]) exit(1);  //if no name, exit
+    remove(&tokens[1]); //remove the file
 }
 void catFile(char *tokens) //cat
 {  
 	int fd, n, i;
     char buff[4096];
-    if (tokens[1] == NULL) exit(1); //if no name of thing to cat, exit
-    fd = open(tokens[1], O_RDONLY); //open file name, read only
+    if (tokens[1]) exit(1); //if no name of thing to cat, exit
+    fd = open(&tokens[1], O_RDONLY); //open file name, read only
     if (fd < 0) exit(2); //if the file is empty, exit
     while (n = read(fd, buff, 1024)) //so long as there is still stuff to read, read
     {
@@ -162,10 +162,10 @@ void listDirectory(char *tokens) //ls code by K.C.
 	char *s;
 	int r;
 
-    if (tokens[1] == NULL)
+    if (tokens[1])
       s = "./";
     else
-      s = tokens[1];
+      s = &tokens[1];
 
     sp = &mystat;
      if ((r = lstat(s, sp)) < 0) //added an ls without a directory
@@ -195,14 +195,14 @@ void changeDirectory(char *tokens) //cd
 	char *HOME, *envp;
 	int i;
 
-	if (tokens[1]==NULL) //if you just said cd
+	if (tokens[1]) //if you just said cd
 	{
 		getenv(envp); //get environmental pointer
-		while(envp[i]!=NULL) //while not at null
+		while(envp[i]) //while not at null
 		{
-			if (strncmp(envp[i], "HOME=",5)==0) //if the string is HOME=..
+			if (strncmp(&envp[i], "HOME=",5)==0) //if the string is HOME=..
 			{  
-				HOME = envp[i]; //grab the string
+				HOME = &envp[i]; //grab the string
 				HOME = HOME +5; //consume "HOME=" from string
 			}
 			i++; //If not, continue to the next part

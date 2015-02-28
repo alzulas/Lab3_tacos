@@ -30,7 +30,7 @@ int server_init(char *name)
       printf("unknown host\n");
       exit(1);
    }
-   printf("    hostname=%s  IP=%s\n", hp->h_name,  inet_ntoa(*(long *)hp->h_addr));
+   printf("    hostname=%s  IP=%d\n", hp->h_name,  inet_ntoa(*(long *)hp->h_addr));
   
    //  create a TCP socket by socket() syscall
    printf("2 : create a socket\n");
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
    char *hostname;
    char line[MAX];
    char token[32][64];
-   char *linept;
+   char *linept, *myargv;
 
    if (argc < 2)
       hostname = "localhost";
@@ -124,44 +124,46 @@ int main(int argc, char *argv[])
       {
         sscanf(linept, "%s", token[i]); //tokenize line
         linept+=strlen(token[i])+1;
+        myargv[i] = token[i];
         i++;
       }
       
-      if (strcmp(token[0], "mkdir") == 0)
+      if (strcmp(argv[0], "mkdir") == 0)
       {
-        makeDir(token);
+        makeDir(*argv);
         linept = "Directory Made on Server";
       }
-      else if (strcmp(token[0], "rmdir") == 0)
+      else if (strcmp(argv[0], "rmdir") == 0)
       {
-        removeDir(token);
+        removeDir(*argv);
         linept = "Directory Removed on Server";
       }
-      else if (strcmp(token[0], "rm") == 0)
+      else if (strcmp(argv[0], "rm") == 0)
       {
-        removeFile(token);
+        removeFile(*argv);
         linept = "File removed on Server";
       }
-      else if (strcmp(token[0], "cat") == 0)
+      else if (strcmp(argv[0], "cat") == 0)
       {
-        catFile(token);
+        catFile(*argv);
         linept = "File concatinated on Server";
       }
-      else if (strcmp(token[0], "ls") == 0)
+      else if (strcmp(argv[0], "ls") == 0)
       {
-        listDirectory(token);
+        listDirectory(*argv);
         linept = "List Printed from Server";
       }
-      else if (strcmp(token[0], "cd") == 0)
+      else if (strcmp(argv[0], "cd") == 0)
       {
         char cwd[1024];
-        changeDirectory(token);
+        changeDirectory(*argv);
         getcwd(cwd, 1024);
-        linept = "New Directory is %s", cwd; 
+        printf("New Directory is %s", cwd); 
+        linept = cwd;
       }
-      else if (strcmp(token[0], "pwd") == 0)
+      else if (strcmp(argv[0], "pwd") == 0)
       {
-        printDirectory(token);
+        printDirectory(*argv);
       }
       else 
       {
@@ -169,7 +171,7 @@ int main(int argc, char *argv[])
         linept = "No such request";
       }
 
-      snprintf(line, MAX, "%d", linept);
+      snprintf(line, MAX, "%s", linept);
 
       // send the echo line to client 
       n = write(newsock, line, MAX);
