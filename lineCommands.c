@@ -66,7 +66,7 @@ void ls_file(char *fname) //The K.C. Code for ls
   printf("%s ",ftime);
 
   // print name
-  printf("%s", basename(fname));
+  printf("%d", basename(fname));
   bzero(buff, 1024);
   // print -> linkname if it's a symbolic file
   if ((sp->st_mode & 0xF000)== 0xA000){ // YOU FINISH THIS PART
@@ -94,32 +94,33 @@ int ls_dir(char *dname) //Zulas code for ls dir
   return 0;
 }
 
-void makeDir(char *tokens) //mkdir
+void makeDir(char *tokens[32]) //mkdir
 {
-	if(tokens[1]) exit(1); //Make sure there is a name to make the dir
-    
-    mkdir(&tokens[1], 0755); //mk dir
-    
-    if (mkdir(&tokens[1], 0777) < 0){ //unless it's already made, then don't make dir.
+	if(!tokens[1]) exit(1); //Make sure there is a name to make the dir
+    printf("passed exit\n");    
+    mkdir(tokens[1], 0755); //mk dir
+    printf("Passed 0775\n");    
+    if (mkdir(tokens[1], 0777) < 0){ //unless it's already made, then don't make dir.
         printf("errno=%d : %s\n", errno, strerror(errno)); //instead error
     }
+    printf("End of function\n");    
 }
-void removeDir(char *tokens) //rmdir
+void removeDir(char *tokens[32]) //rmdir
 {
-	if (tokens[1]) exit(1); //if no name of dir, exit.
+	if (!tokens[1]) exit(1); //if no name of dir, exit.
     rmdir(tokens[1]); //otherwise, remove dir
 }
-void removeFile(char* tokens) //rm
+void removeFile(char* tokens[32]) //rm
 {
-    if (tokens[1]) exit(1);  //if no name, exit
-    remove(&tokens[1]); //remove the file
+    if (!tokens[1]) exit(1);  //if no name, exit
+    remove(tokens[1]); //remove the file
 }
-void catFile(char *tokens) //cat
+void catFile(char *tokens[32]) //cat
 {  
 	int fd, n, i;
     char buff[4096];
-    if (tokens[1]) exit(1); //if no name of thing to cat, exit
-    fd = open(&tokens[1], O_RDONLY); //open file name, read only
+    if (!tokens[1]) exit(1); //if no name of thing to cat, exit
+    fd = open(tokens[1], O_RDONLY); //open file name, read only
     if (fd < 0) exit(2); //if the file is empty, exit
     while (n = read(fd, buff, 1024)) //so long as there is still stuff to read, read
     {
@@ -155,17 +156,17 @@ void catFile(char *tokens) //cat
     close(gd);
 
   }*/
-void listDirectory(char *tokens) //ls code by K.C.
+void listDirectory(char *tokens[32]) //ls code by K.C.
 {
 	char cwd[1024];
 	char name[1024];
 	char *s;
 	int r;
 
-    if (tokens[1])
+    if (!tokens[1])
       s = "./";
     else
-      s = &tokens[1];
+      s = tokens[1];
 
     sp = &mystat;
      if ((r = lstat(s, sp)) < 0) //added an ls without a directory
@@ -190,12 +191,12 @@ void listDirectory(char *tokens) //ls code by K.C.
       ls_file(name);
 }
 
-void changeDirectory(char *tokens) //cd
+void changeDirectory(char *tokens[32]) //cd
 {
 	char *HOME, *envp;
 	int i;
 
-	if (tokens[1]) //if you just said cd
+	if (!tokens[1]) //if you just said cd
 	{
 		getenv(envp); //get environmental pointer
 		while(envp[i]) //while not at null
@@ -212,7 +213,7 @@ void changeDirectory(char *tokens) //cd
 	chdir(tokens[1]); //else, go to where you asked.
 }
 
-void printDirectory(char *tokens)
+void printDirectory(char *tokens[32])
 {
 	char cwd[1024]; 
 	getcwd(cwd, 1024);  //figure out the directory

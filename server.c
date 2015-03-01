@@ -30,7 +30,7 @@ int server_init(char *name)
       printf("unknown host\n");
       exit(1);
    }
-   printf("    hostname=%s  IP=%s\n", hp->h_name,  inet_ntoa(*(long *)hp->h_addr));
+   printf("    hostname=%s  IP=%d\n", hp->h_name,  inet_ntoa(*(long *)hp->h_addr));
   
    //  create a TCP socket by socket() syscall
    printf("2 : create a socket\n");
@@ -71,6 +71,7 @@ int server_init(char *name)
    printf("5 : server is listening ....\n");
    listen(sock, 5);
    printf("===================== init done =======================\n");
+   return 0;
 }
 
 
@@ -79,7 +80,7 @@ int main(int argc, char *argv[])
    char *hostname;
    char line[MAX];
    char token[32][64];
-   char *linept, *myargv;
+   char *linept, *myargv[32];
 
    if (argc < 2)
       hostname = "localhost";
@@ -116,7 +117,7 @@ int main(int argc, char *argv[])
       
       // show the line string
       printf("server: read  n=%d bytes; line=[%s]\n", n, line);
-/*
+
       linept = line;
 
       int i = 0;
@@ -127,43 +128,45 @@ int main(int argc, char *argv[])
         myargv[i] = token[i];
         i++;
       }
+      printf("passed %s to serever argv\n", myargv[0]);
       
-      if (strcmp(argv[0], "mkdir") == 0)
+      if (strcmp(myargv[0], "mkdir") == 0)
       {
-        makeDir(*argv);
+        printf("made it in mkdir\n");
+        makeDir(myargv);
         linept = "Directory Made on Server";
       }
-      else if (strcmp(argv[0], "rmdir") == 0)
+      else if (strcmp(myargv[0], "rmdir") == 0)
       {
-        removeDir(*argv);
+        removeDir(myargv);
         linept = "Directory Removed on Server";
       }
-      else if (strcmp(argv[0], "rm") == 0)
+  /*    else if (strcmp(myargv[0], "rm") == 0)
       {
-        removeFile(*argv);
+        removeFile(myargv);
         linept = "File removed on Server";
       }
-      else if (strcmp(argv[0], "cat") == 0)
+      else if (strcmp(myargv[0], "cat") == 0)
       {
-        catFile(*argv);
+        catFile(myargv);
         linept = "File concatinated on Server";
       }
-      else if (strcmp(argv[0], "ls") == 0)
+      else if (strcmp(myargv[0], "ls") == 0)
       {
-        listDirectory(*argv);
+        listDirectory(myargv);
         linept = "List Printed from Server";
       }
-      else if (strcmp(argv[0], "cd") == 0)
+      else if (strcmp(myargv[0], "cd") == 0)
       {
         char cwd[1024];
-        changeDirectory(*argv);
+        changeDirectory(myargv);
         getcwd(cwd, 1024);
         printf("New Directory is %s", cwd); 
         linept = cwd;
       }
-      else if (strcmp(argv[0], "pwd") == 0)
+      else if (strcmp(myargv[0], "pwd") == 0)
       {
-        printDirectory(*argv);
+        printDirectory(myargv);
       }
       else 
       {
