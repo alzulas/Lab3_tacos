@@ -97,7 +97,6 @@ int main(int argc, char *argv[ ])
       myargv[i] = token[i];
       i++;
     }
-    printf("passed %s to serever argv\n", myargv[0]);
         
     if (strcmp(myargv[0], "lmkdir") == 0)
     {
@@ -115,7 +114,7 @@ int main(int argc, char *argv[ ])
       removeFile(myargv);
       linept = "File removed on Client\n";
     }
-    else if (strcmp(myargv[0], "lcat") == 0) //this needs work, should print to sreen on client 
+    else if (strcmp(myargv[0], "lcat") == 0) 
     {
       catFile(myargv);
       linept = "File concatinated on Client\n";
