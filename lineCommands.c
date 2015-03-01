@@ -131,13 +131,16 @@ void catFile(char *tokens[32]) //cat
     printf("\n");
     close(fd); //close file
 }
-/*  else if (strcmp(entry[0].value, "cp")==0)
+void copy (char *tokens[32])
   {
-    if (entry[2].name == NULL) exit(1);
+  	int n, total, fd, gd;
+  	char buff[4096];
 
-    fd = open(entry[1].value, O_RDONLY);
+    if (!tokens[1]) exit(1);
+
+    fd = open(tokens[1], O_RDONLY);
     if(fd < 0) exit(2);
-    gd = open(entry[2].value, O_WRONLY|O_CREAT);
+    gd = open(tokens[2], O_WRONLY|O_CREAT);
     if (gd < 0) exit(3);
     total = 0;    
 
@@ -151,7 +154,7 @@ void catFile(char *tokens[32]) //cat
     close(fd);
     close(gd);
 
-  }*/
+}
 void listDirectory(char *tokens[32]) //ls code by K.C.
 {
 	char cwd[1024];

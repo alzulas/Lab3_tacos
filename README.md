@@ -10,4 +10,4 @@ Stuff left
 -get
 -put
 
-
+Copy may be useful for some stuff, so I left it in.
