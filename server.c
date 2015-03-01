@@ -132,7 +132,6 @@ int main(int argc, char *argv[])
       
       if (strcmp(myargv[0], "mkdir") == 0)
       {
-        printf("made it in mkdir\n");
         makeDir(myargv);
         linept = "Directory Made on Server\n";
       }

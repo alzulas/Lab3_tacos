@@ -139,9 +139,12 @@ int main(int argc, char *argv[ ])
       printf ("Directory = %s \n", cwd); //print it
       linept = cwd;
     }
+    else if (strcmp(myargv[0], "exit") == 0)
+    {
+      exit(1);
+    }
     else 
     {
-
     // Send ENTIRE line to server
     n = write(sock, line, MAX);
     printf("client: wrote n=%d bytes; line=(%s)\n", n, line);

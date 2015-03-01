@@ -97,13 +97,9 @@ int ls_dir(char *dname) //Zulas code for ls dir
 void makeDir(char *tokens[32]) //mkdir
 {
 	if(!tokens[1]) exit(1); //Make sure there is a name to make the dir
-    printf("passed exit\n");    
-    mkdir(tokens[1], 0755); //mk dir
-    printf("Passed 0775\n");    
-    if (mkdir(tokens[1], 0777) < 0){ //unless it's already made, then don't make dir.
+    if (mkdir(tokens[1], 0755) < 0){ //unless it's already made, then don't make dir.
         printf("errno=%d : %s\n", errno, strerror(errno)); //instead error
-    }
-    printf("End of function\n");    
+    }   
 }
 void removeDir(char *tokens[32]) //rmdir
 {
