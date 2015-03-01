@@ -134,45 +134,48 @@ int main(int argc, char *argv[])
       {
         printf("made it in mkdir\n");
         makeDir(myargv);
-        linept = "Directory Made on Server";
+        linept = "Directory Made on Server\n";
       }
       else if (strcmp(myargv[0], "rmdir") == 0)
       {
         removeDir(myargv);
-        linept = "Directory Removed on Server";
+        linept = "Directory Removed on Server\n";
       }
-  /*    else if (strcmp(myargv[0], "rm") == 0)
+      else if (strcmp(myargv[0], "rm") == 0)
       {
         removeFile(myargv);
-        linept = "File removed on Server";
+        linept = "File removed on Server\n";
       }
-      else if (strcmp(myargv[0], "cat") == 0)
+      else if (strcmp(myargv[0], "cat") == 0) //this needs work, should print to sreen on client 
       {
         catFile(myargv);
-        linept = "File concatinated on Server";
+        linept = "File concatinated on Server\n";
       }
-      else if (strcmp(myargv[0], "ls") == 0)
+      else if (strcmp(myargv[0], "ls") == 0) //should also send stuff to the client, doesn't ls current directory well
       {
         listDirectory(myargv);
-        linept = "List Printed from Server";
+        linept = "List Printed from Server\n";
       }
-      else if (strcmp(myargv[0], "cd") == 0)
+      else if (strcmp(myargv[0], "cd") == 0) //doesn't work right.
       {
         char cwd[1024];
         changeDirectory(myargv);
         getcwd(cwd, 1024);
-        printf("New Directory is %s", cwd); 
+        printf("New Directory is %s\n", cwd); 
         linept = cwd;
       }
       else if (strcmp(myargv[0], "pwd") == 0)
       {
-        printDirectory(myargv);
+        char cwd[1024];
+        getcwd(cwd, 1024);  //figure out the directory
+        printf ("Directory = %s \n", cwd); //print it
+        linept = cwd;
       }
       else 
       {
-        printf ("No such request");
+        printf ("No such request\n");
         linept = "No such request";
-      }*/
+      }
 
       snprintf(line, MAX, "%s", linept);
 

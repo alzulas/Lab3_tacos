@@ -66,6 +66,9 @@ int main(int argc, char *argv[ ])
 {
   int n;
   char line[MAX], ans[MAX];
+  char *hostname;
+  char token[32][64];
+  char *linept, *myargv[32];
 
   if (argc < 3){
      printf("Usage : client ServerName SeverPort\n");
@@ -73,61 +76,7 @@ int main(int argc, char *argv[ ])
   }
 
   client_init(argv);
-
-  /*
-  linept = line;
-
-  int i = 0;
-  while (*linept)
-  {
-    sscanf(linept, "%s", token[i]); //tokenize line
-    linept+=strlen(token[i])+1;
-    myargv[i] = token[i];
-    i++;
-  }
-      
-  if (strcmp(argv[0], "lmkdir") == 0)
-  {
-    makeDir(*argv);
-    linept = "Directory Made on Server";
-  }
-  else if (strcmp(argv[0], "lrmdir") == 0)
-  {
-    removeDir(*argv);
-    linept = "Directory Removed on Server";
-  }
-  else if (strcmp(argv[0], "lrm") == 0)
-  {
-    removeFile(*argv);
-    linept = "File removed on Server";
-  }
-  else if (strcmp(argv[0], "lcat") == 0)
-  {
-    catFile(*argv);
-    linept = "File concatinated on Server";
-  }
-  else if (strcmp(argv[0], "lls") == 0)
-  {
-    listDirectory(*argv);
-    linept = "List Printed from Server";
-  }
-  else if (strcmp(argv[0], "lcd") == 0)
-  {
-    char cwd[1024];
-    changeDirectory(*argv);
-    getcwd(cwd, 1024);
-    printf("New Directory is %s", cwd); 
-    linept = cwd;
-  }
-  else if (strcmp(argv[0], "lpwd") == 0)
-  {
-    printDirectory(*argv);
-  }
-  else 
-  {
-   */
-
-
+   
   printf("********  processing loop  *********\n");
   while (1){
     printf("input a line : ");
@@ -138,6 +87,62 @@ int main(int argc, char *argv[ ])
     if (line[0]==0)                  // exit if NULL line
        exit(0);
 
+    linept = line;
+
+    int i = 0;
+    while (*linept)
+    {
+      sscanf(linept, "%s", token[i]); //tokenize line
+      linept+=strlen(token[i])+1;
+      myargv[i] = token[i];
+      i++;
+    }
+    printf("passed %s to serever argv\n", myargv[0]);
+        
+    if (strcmp(myargv[0], "lmkdir") == 0)
+    {
+      printf("made it in mkdir\n");
+      makeDir(myargv);
+      linept = "Directory Made on Client\n";
+    }
+    else if (strcmp(myargv[0], "lrmdir") == 0)
+    {
+      removeDir(myargv);
+      linept = "Directory Removed on Client\n";
+    }
+    else if (strcmp(myargv[0], "lrm") == 0)
+    {
+      removeFile(myargv);
+      linept = "File removed on Client\n";
+    }
+    else if (strcmp(myargv[0], "lcat") == 0) //this needs work, should print to sreen on client 
+    {
+      catFile(myargv);
+      linept = "File concatinated on Client\n";
+    }
+    else if (strcmp(myargv[0], "lls") == 0) //should also send stuff to the client, doesn't ls current directory well
+    {
+      listDirectory(myargv);
+      linept = "List Printed from Client\n";
+    }
+    else if (strcmp(myargv[0], "lcd") == 0) //doesn't work right.
+    {
+      char cwd[1024];
+      changeDirectory(myargv);
+      getcwd(cwd, 1024);
+      printf("New Directory is %s\n", cwd); 
+      linept = cwd;
+    }
+    else if (strcmp(myargv[0], "lpwd") == 0)
+    {
+      char cwd[1024];
+      getcwd(cwd, 1024);  //figure out the directory
+      printf ("Directory = %s \n", cwd); //print it
+      linept = cwd;
+    }
+    else 
+    {
+
     // Send ENTIRE line to server
     n = write(sock, line, MAX);
     printf("client: wrote n=%d bytes; line=(%s)\n", n, line);
@@ -145,7 +150,7 @@ int main(int argc, char *argv[ ])
     // Read a line from sock and show it
     n = read(sock, ans, MAX);
     printf("client: read  n=%d bytes; echo=(%s)\n",n, ans);
+    }
   }
-  //}
 }
 

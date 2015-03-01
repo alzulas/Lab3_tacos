@@ -73,7 +73,7 @@ void ls_file(char *fname) //The K.C. Code for ls
     if (readlink(fname, buff, 1024) != -1)// SYSCALL to read the linkname
        printf(" -> %s", buff);
   }
-  printf("<br>");
+  printf("\n");
 }
 
 int ls_dir(char *dname) //Zulas code for ls dir
@@ -82,13 +82,13 @@ int ls_dir(char *dname) //Zulas code for ls dir
   int fd, i;
   char buff[1024];
 
-  printf("Directory Location: %s <br>", dname); // print the dir location
+  printf("Directory Location: %s \n", dname); // print the dir location
   fd = opendir(dname); //open the dir into fd
   while ((dp = readdir(fd)) != NULL) //while not the end of the dir
   {
     if (dp->d_name!=NULL) //if the name isn't null
     {
-		printf("%s <br>",dp->d_name); //print the name of that item in the directory
+		printf("%s \n",dp->d_name); //print the name of that item in the directory
     }
   }
   return 0;
@@ -213,9 +213,10 @@ void changeDirectory(char *tokens[32]) //cd
 	chdir(tokens[1]); //else, go to where you asked.
 }
 
-void printDirectory(char *tokens[32])
+/*char printDirectory(char *tokens[32])
 {
-	char cwd[1024]; 
+	char *cwd[1024]; 
 	getcwd(cwd, 1024);  //figure out the directory
 	printf ("Directory = %s \n", cwd); //print it
-}
+	return cwd;
+}*/
