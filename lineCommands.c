@@ -114,22 +114,22 @@ void removeFile(char* tokens[32]) //rm
 void catFile(char *tokens[32]) //cat
 {  
 	int fd, n, i;
-    char buff[4096];
-    if (!tokens[1]) exit(1); //if no name of thing to cat, exit
-    fd = open(tokens[1], O_RDONLY); //open file name, read only
-    if (fd < 0) exit(2); //if the file is empty, exit
-    while (n = read(fd, buff, 1024)) //so long as there is still stuff to read, read
+  char buff[4096];
+  if (!tokens[1]) exit(1); //if no name of thing to cat, exit
+  fd = open(tokens[1], O_RDONLY); //open file name, read only
+  if (fd < 0) exit(2); //if the file is empty, exit
+  while (n = read(fd, buff, 1024)) //so long as there is still stuff to read, read
+  {
+    for (i = 0; i < n; i++) //for look to print char to the screen
     {
-      for (i = 0; i < n; i++) //for look to print char to the screen
-      {
-        if(buff[i] == "\n") //switch \n to \r
-          putchar("\r");
-        else
-          putchar(buff[i]);
-      }
+      if(buff[i] == "\n") //switch \n to \r
+        putchar("\r");
+      else
+        putchar(buff[i]);
     }
-    printf("\n");
-    close(fd); //close file
+  }
+  printf("\n");
+  close(fd); //close file
 }
 void copy (char *tokens[32])
   {
@@ -194,25 +194,14 @@ void changeDirectory(char *tokens[32]) //cd
 {
 	char *HOME, *envp;
 	int i;
-
 	if (!tokens[1]) //if you just said cd
 	{
-		getenv(envp); //get environmental pointer
-		while(envp[i]) //while not at null
-		{
-			if (strncmp(&envp[i], "HOME=",5)==0) //if the string is HOME=..
-			{  
-				HOME = &envp[i]; //grab the string
-				HOME = HOME +5; //consume "HOME=" from string
-			}
-			i++; //If not, continue to the next part
-		}
-		chdir(HOME); //go to home
+		tokens[1]=getenv("HOME"); //get environmental pointer
 	} //set myargv1 to $HOME
-	chdir(tokens[1]); //else, go to where you asked.
+	  chdir(tokens[1]); //else, go to where you asked.
 }
 
-/*char printDirectory(char *tokens[32])
+/*char printDirectory(char *tokens[32]) //This function no working for some reason
 {
 	char *cwd[1024]; 
 	getcwd(cwd, 1024);  //figure out the directory

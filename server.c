@@ -118,6 +118,8 @@ int main(int argc, char *argv[])
       // show the line string
       printf("server: read  n=%d bytes; line=[%s]\n", n, line);
 
+      bzero(myargv, 32);
+
       linept = line;
 
       int i = 0;
@@ -128,7 +130,6 @@ int main(int argc, char *argv[])
         myargv[i] = token[i];
         i++;
       }
-      printf("passed %s to serever argv\n", myargv[0]);
       
       if (strcmp(myargv[0], "mkdir") == 0)
       {
