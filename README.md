@@ -4,7 +4,7 @@ Lab 3 homeworks
 Do not commit compiled code.
 
 Stuff left
--ls and lls are only broken for current directory
+-ls and lls need to print to client
 -cat needs to print to client
 -get
 -put
