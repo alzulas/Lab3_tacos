@@ -89,6 +89,8 @@ int main(int argc, char *argv[ ])
 
     linept = line;
 
+    bzero(myargv, 32);
+
     int i = 0;
     while (*linept)
     {
