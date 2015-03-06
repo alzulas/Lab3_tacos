@@ -1,5 +1,8 @@
 //**************************** ECHO CLIENT CODE **************************
 // The echo client client.c
+//A. Leah Zulas and Mackenzie Meade
+//Lab 3
+//K.C. Wang 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -170,13 +173,13 @@ int main(int argc, char *argv[ ])
       // use int length for SIZE, int count for count
       // strtol() to convert from string to int
       length = strtol(ans, (char**)NULL, 10);
-	printf("length=%d\n", length);
+	    printf("length=%d\n", length);
       count = 0;
       while (count < length)
       {
         n = read(sock, ans, MAX);
- 	printf("%s", ans);
-	count += MAX;
+ 	      printf("%s", ans);
+	      count += MAX;
       }
     }
     else if (strcmp(myargv[0], "lcd") == 0)
@@ -216,38 +219,38 @@ int main(int argc, char *argv[ ])
         while (count < length)		// read from the server and write to the file
         {
           n = read(sock, ans, MAX);
-	  printf("client: read n=%d bytes\n", n);
+	        printf("client: read n=%d bytes\n", n);
           write(fp, ans, n);
-	  count += n;
+	        count += n;
         }
       }
     }
     else if (strcmp(myargv[0], "put") == 0)
     {
-	n = write(sock, line, MAX);	// tell server what we're doing
-	// THIS IS A DIRECT COPY OF SERVER GET
-	// send "BAD" to server if no arg was specified or file open failed
-	if (!myargv[1]) { n = write(sock, "BAD", MAX); }
-        fp = open(myargv[1], O_RDONLY);
-	if (fp < 0) { n = write(sock, "BAD", MAX); }
-	sp = &fstat;
-        if ( (d = lstat(myargv[1], &fstat)) < 0)
-        {
-           printf("can't stat %s\n", myargv[1]); 
-           n = write(sock, "BAD", MAX);
-        }
-	length = sp->st_size;
-	snprintf(line, MAX, "%d", length);
-	// write size to server
-	n = write(sock, line, MAX);
-	printf("client: wrote n=%d bytes; ECHO=[%s]\n", n, line);
-	// write file string to server
+    	n = write(sock, line, MAX);	// tell server what we're doing
+    	// THIS IS A DIRECT COPY OF SERVER GET
+    	// send "BAD" to server if no arg was specified or file open failed
+    	if (!myargv[1]) { n = write(sock, "BAD", MAX); }
+      fp = open(myargv[1], O_RDONLY);
+    	if (fp < 0) { n = write(sock, "BAD", MAX); }
+    	sp = &fstat;
+      if ( (d = lstat(myargv[1], &fstat)) < 0)
+      {
+         printf("can't stat %s\n", myargv[1]); 
+         n = write(sock, "BAD", MAX);
+      }
+    	length = sp->st_size;
+    	snprintf(line, MAX, "%d", length);
+    	// write size to server
+    	n = write(sock, line, MAX);
+    	printf("client: wrote n=%d bytes; ECHO=[%s]\n", n, line);
+    	// write file string to server
 	
-	while(d = read(fp, buf, MAX))
-	{
-	  n = write(sock, buf, MAX);
-	  printf("client: wrote n=%d bytes to server\n", n);
-	}
+    	while(d = read(fp, buf, MAX))
+    	{
+    	  n = write(sock, buf, MAX);
+    	  printf("client: wrote n=%d bytes to server\n", n);
+    	}
     }
     else if ((strcmp(myargv[0], "quit") == 0) || (strcmp(myargv[0], "exit") == 0))	// changed so "quit" or "exit" will work
     {

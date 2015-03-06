@@ -1,4 +1,9 @@
 // This is the echo SERVER server.c
+//A. Leah Zulas and Mackenzie Meade
+//Lab 3
+//K.C. Wang 
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -161,7 +166,7 @@ int main(int argc, char *argv[])
       else if (strcmp(myargv[0], "ls") == 0) //should also send stuff to the client, doesn't ls current directory well
       {
         linept = listDirectory2(myargv);
-	printf("%s\n", linept);
+	      printf("%s\n", linept);
         //linept = "List Printed from Server";
       }
       else if (strcmp(myargv[0], "cd") == 0) //doesn't work right.
@@ -174,14 +179,10 @@ int main(int argc, char *argv[])
       }
       else if (strcmp(myargv[0], "pwd") == 0)
       {
-        /*char cwd[1024];
-        getcwd(cwd, 1024);  //figure out the directory
-        printf ("Directory = %s \n", cwd); //print it
-        linept = cwd;
-	*/
-	linept = printDirectory(myargv);
+  
+	       linept = printDirectory(myargv);
 
-	free(linept);
+	       free(linept);
       }
       else if (strcmp(myargv[0], "get") == 0)	// get: open file, read file into string, write string to client
       {
@@ -199,52 +200,50 @@ int main(int argc, char *argv[])
 
       if ((strcmp(myargv[0], "ls") == 0) || (strcmp(myargv[0], "cat") == 0))
       {
-	// first reply: SIZE of string to be sent
-	snprintf(line, MAX, "%d", (int)strlen(linept));
-	n = write(newsock, line, MAX);
+      	// first reply: SIZE of string to be sent
+      	snprintf(line, MAX, "%d", (int)strlen(linept));
+      	n = write(newsock, line, MAX);
 
-	printf("server: wrote n=%d bytes; ECHO=[%s]\n", n, line);
-	// use int length for SIZE, int count for count
-	// strtol() to convert from string to int
+      	printf("server: wrote n=%d bytes; ECHO=[%s]\n", n, line);
+      	// use int length for SIZE, int count for count
+      	// strtol() to convert from string to int
         length = (int)strlen(linept);
-	count = 0;
-	while (count < length)
-	{
+      	count = 0;
+        while (count < length)
+        {
           n = write(newsock, linept + count, MAX);
-	  printf("server: wrote n=%d bytes to client\n", n);
-	  count += MAX;
-	}
+      	  printf("server: wrote n=%d bytes to client\n", n);
+      	  count += MAX;
+        }
       }
       else if (strcmp(myargv[0], "get") == 0)
       {
-	// send "BAD" back to client if no arg was specified or file open failed
-	if (!myargv[1]) { n = write(newsock, "BAD", MAX); }
+      	// send "BAD" back to client if no arg was specified or file open failed
+      	if (!myargv[1]) { n = write(newsock, "BAD", MAX); }
         fp = open(myargv[1], O_RDONLY);
-	if (fp < 0) { n = write(newsock, "BAD", MAX); }
-	sp = &fstat;
+      	if (fp < 0) { n = write(newsock, "BAD", MAX); }
+      	sp = &fstat;
         if ( (d = lstat(myargv[1], &fstat)) < 0)
         {
            printf("can't stat %s\n", myargv[1]); 
            n = write(newsock, "BAD", MAX);
         }
-	length = sp->st_size;
-	snprintf(line, MAX, "%d", length);
-	// write size to client
-	n = write(newsock, line, MAX);
-	printf("server: wrote n=%d bytes; ECHO=[%s]\n", n, line);
-	// write file string to client
-	
-	while(d = read(fp, buf, MAX))
-	{
-	  n = write(newsock, buf, MAX);
-	  printf("server: wrote n=%d bytes to client\n", n);
-	}
+      	length = sp->st_size;
+      	snprintf(line, MAX, "%d", length);
+      	// write size to client
+      	n = write(newsock, line, MAX);
+      	printf("server: wrote n=%d bytes; ECHO=[%s]\n", n, line);
+      	// write file string to client
+      	
+      	while(d = read(fp, buf, MAX))
+      	{
+      	  n = write(newsock, buf, MAX);
+      	  printf("server: wrote n=%d bytes to client\n", n);
+      	}
       }
       else if (strcmp(myargv[0], "put") == 0)
       {
-	// THIS IS A DIRECT COPY OF CLIENT GET
-        //n = write(sock, line, MAX);
-        //printf("server: wrote n=%d bytes; line=(%s)\n", n, line);
+	     // THIS IS A DIRECT COPY OF CLIENT GET
 
         // client sends SIZE of file
         n = read(newsock, line, MAX);
@@ -262,9 +261,9 @@ int main(int argc, char *argv[])
           while (count < length)		// read from the server and write to the file
           {
             n = read(newsock, line, MAX);
-	    printf("server: read n=%d bytes\n", n);
+	          printf("server: read n=%d bytes\n", n);
             write(fp, line, n);
-	    count += n;
+	          count += n;
           }
         }
       }

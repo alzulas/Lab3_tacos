@@ -1,4 +1,7 @@
 //lineCommands.c
+//A. Leah Zulas and Mackenzie Meade
+//Lab 3
+//K.C. Wang 
 
 #include <errno.h>
 #include <stdio.h>
