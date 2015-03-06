@@ -237,8 +237,8 @@ int main(int argc, char *argv[])
       	
       	while(d = read(fp, buf, MAX))
       	{
-      	  n = write(newsock, buf, MAX);
-      	  printf("server: wrote n=%d bytes to client\n", n);
+        	  n = write(newsock, buf, MAX);
+        	  printf("server: wrote n=%d bytes to client\n", n);
       	}
       }
       else if (strcmp(myargv[0], "put") == 0)
@@ -260,10 +260,17 @@ int main(int argc, char *argv[])
           count = 0;
           while (count < length)		// read from the server and write to the file
           {
-            n = read(newsock, line, MAX);
-	          printf("server: read n=%d bytes\n", n);
-            write(fp, line, n);
-	          count += n;
+            if(length - count < MAX)
+            {
+              n = read(newsock, line, (length - count));  
+            }
+            else
+            {
+              n = read(newsock, line, MAX);
+  	          printf("server: read n=%d bytes\n", n);
+              write(fp, line, n);
+  	          count += n;
+            }
           }
         }
       }

@@ -218,10 +218,17 @@ int main(int argc, char *argv[ ])
         count = 0;
         while (count < length)		// read from the server and write to the file
         {
-          n = read(sock, ans, MAX);
-	        printf("client: read n=%d bytes\n", n);
-          write(fp, ans, n);
-	        count += n;
+          if((length - count) < MAX)
+          {
+            n = read(sock, line, (length - count));  
+          }
+          else
+          {
+            n = read(sock, ans, MAX);
+  	        printf("client: read n=%d bytes\n", n);
+            write(fp, ans, n);
+  	        count += n;
+          }
         }
       }
     }
@@ -248,8 +255,8 @@ int main(int argc, char *argv[ ])
 	
     	while(d = read(fp, buf, MAX))
     	{
-    	  n = write(sock, buf, MAX);
-    	  printf("client: wrote n=%d bytes to server\n", n);
+        n = write(fp, buf, MAX);
+        printf("client: wrote n=%d bytes to server\n", n);
     	}
     }
     else if ((strcmp(myargv[0], "quit") == 0) || (strcmp(myargv[0], "exit") == 0))	// changed so "quit" or "exit" will work
